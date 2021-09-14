@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class GroupProjectApplication {
 
 	public static void main(String[] args) {
+		//sami
 		SpringApplication.run(GroupProjectApplication.class, args);
 	}
 
