@@ -1,5 +1,4 @@
 package Scrumtious.Group.Project.User;
-import java.util.List;
 
 
 public class User {
