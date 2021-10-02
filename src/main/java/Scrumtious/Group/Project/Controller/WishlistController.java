@@ -16,12 +16,12 @@ import java.util.ArrayList;
 
 @RestController
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-public class ShoppingCartController {
+public class WishlistController {
 
-  private final ShoppingCartRepo shoppingcartRepo;
+  private final WishlistRepo WishlistRepo;
 
-  ShoppingCartController(ShoppingCartRepo shoppingcartRepo) {
-    this.shoppingcartRepo = shoppingcartRepo;
+  WishlistController(WishlistRepo WishlistRepo) {
+    this.WishlistRepo = WishlistRepo;
   }
   
   @GetMapping("/") //endpoint
@@ -29,28 +29,28 @@ public class ShoppingCartController {
 	return "Greetings from Spring Boot!";
   }
 	
-  @GetMapping("/shoppingcart/{userID}") //will go to repo and interact with mongodb
-  ShoppingCart getShoppingCartByUserId(@PathVariable String userID) {  //28-35 gets cart that belongs to user
+  @GetMapping("/Wishlist/{userID}") //will go to repo and interact with mongodb
+  Wishlist getWishlistByUserId(@PathVariable String userID) {  //28-35 gets cart that belongs to user
 
     System.out.println(userID); 
     
-    return shoppingcartRepo.findByUserID(userID);
+    return WishlistRepo.findByUserID(userID);
 
   }
 
-  @GetMapping("/shoppingcart/create/{userID}") //will go to repo and interact with mongodb
-  void getAllShoppingCart(@PathVariable String userID) {
-    shoppingcartRepo.save(new ShoppingCart(userID, new ArrayList<String>()));   
-    System.out.println(shoppingcartRepo.findAll());
+  @GetMapping("/Wishlist/create/{userID}") //will go to repo and interact with mongodb
+  void getAllWishlist(@PathVariable String userID) {
+    WishlistRepo.save(new Wishlist(userID, new ArrayList<String>()));   
+    System.out.println(WishlistRepo.findAll());
 
   }
 
-  @PostMapping(path = "/shoppingcart/update/{cartID}")
-  public void modifyBookInCart(@RequestBody ShoppingCart cart, @PathVariable String cartID) {
+  @PostMapping(path = "/Wishlist/update/{cartID}")
+  public void modifyBookInCart(@RequestBody Wishlist cart, @PathVariable String cartID) {
 
-    ShoppingCart currentCart = shoppingcartRepo.findById(cartID).orElse(new ShoppingCart());
+    Wishlist currentCart = WishlistRepo.findById(cartID).orElse(new Wishlist());
     currentCart.bookIDS = cart.bookIDS;
-    shoppingcartRepo.save(currentCart);
+    WishlistRepo.save(currentCart);
 
       //code
   }
