@@ -4,11 +4,11 @@ import java.util.List;
 import Scrumtious.Group.Project.Model.Wishlist;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface WishlistRepo extends MongoRepository<ShoppingCart, String> {
+public interface WishlistRepo extends MongoRepository<Wishlist, String> {
 
-  public ShoppingCart findByUserID(String userID);
+  public Wishlist findByUserID(String userID);
 
-  public List<ShoppingCart> findAll();
+  public List<Wishlist> findAll();
  
 
 }

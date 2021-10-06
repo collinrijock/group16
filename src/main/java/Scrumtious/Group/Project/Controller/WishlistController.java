@@ -12,8 +12,6 @@ import Scrumtious.Group.Project.Applications.*;
 import Scrumtious.Group.Project.Model.*;
 import java.util.ArrayList;
 
-
-
 @RestController
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 public class WishlistController {
@@ -29,7 +27,7 @@ public class WishlistController {
 	return "Greetings from Spring Boot!";
   }
 	
-  @GetMapping("/Wishlist/{userID}") //will go to repo and interact with mongodb
+  @GetMapping("/wishlist/{userID}") //will go to repo and interact with mongodb
   Wishlist getWishlistByUserId(@PathVariable String userID) {  //28-35 gets cart that belongs to user
 
     System.out.println(userID); 
@@ -38,21 +36,19 @@ public class WishlistController {
 
   }
 
-  @GetMapping("/Wishlist/create/{userID}") //will go to repo and interact with mongodb
-  void getAllWishlist(@PathVariable String userID) {
-    WishlistRepo.save(new Wishlist(userID, new ArrayList<String>()));   
+  @GetMapping("/wishlist/create/{userID}") //will go to repo and interact with mongodb
+  String getAllWishlist(@PathVariable String userID) {
+    WishlistRepo.save(new Wishlist(userID));   
     System.out.println(WishlistRepo.findAll());
-
+    return ("Wishlist for user " + userID + " succesfully created!");
   }
 
-  @PostMapping(path = "/Wishlist/update/{cartID}")
-  public void modifyBookInCart(@RequestBody Wishlist cart, @PathVariable String cartID) {
-
-    Wishlist currentCart = WishlistRepo.findById(cartID).orElse(new Wishlist());
-    currentCart.bookIDS = cart.bookIDS;
-    WishlistRepo.save(currentCart);
-
-      //code
+  @PostMapping(path = "/wishlist/update/{userID}")
+    void modifyBookInCart(@RequestBody String bookID, @RequestBody String book, @PathVariable String userID) {
+      Wishlist wishlist = WishlistRepo.findById(userID).orElse(new Wishlist(userID));
+      wishlist.wishlistBooks.put(bookID, book);
+      System.out.println(wishlist);
+      WishlistRepo.save(wishlist);
   }
 
 

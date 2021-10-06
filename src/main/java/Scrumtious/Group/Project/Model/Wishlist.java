@@ -3,14 +3,14 @@ package Scrumtious.Group.Project.Model;
 import java.util.*;
 
 public class Wishlist {
-    private final long userID;
+    private final String userID;
 	//change object to book when implemented
-	Hashtable<String, Object> wishlistBooks = new Hashtable<String, Object>();
-	public Wishlist(long userID) {
+	public Hashtable<String, Object> wishlistBooks = new Hashtable<String, Object>();
+	public Wishlist(String userID) {
 		this.userID = userID;
 	}
 
-	public long getUserID() {
+	public String getUserID() {
 		return userID;
 	}
 
@@ -18,12 +18,12 @@ public class Wishlist {
 		//check bookrepo, if return book add it to wishlist	
 	}
 
-	public Book removeBook(String bookID) {
+	public void removeBook(String bookID) {
 		//check wishlistBooks, if return book remove it	
 	}
 
 	public void addBookToCart(String bookID) {
-		Book book = removeBook(bookID);
+		//Book book = removeBook(bookID);
 	}
 
 	public String getWishlistBooks() {
