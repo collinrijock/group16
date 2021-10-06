@@ -1,6 +1,4 @@
 package Scrumtious.Group.Project.User;
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.stereotype.Repository;
 
 
 public class User {
@@ -14,23 +12,23 @@ public class User {
 	public User(String fName, 
 				String lName, 
 				String email, 
-				CardInformation userCardInformation, 
-				WishList wishList) 
+				CardInformation userCardInformation) 
+				//WishList wishList) 
 	{
 		super();
 		this.fName = fName;
 		this.lName = lName;
 		this.email = email;
 		this.userCardInformation = userCardInformation;
-		this.wishList = wishList;
+		//this.wishList = wishList;
 	}
 
 	public User(Long id, 
 				String fName, 
 				String lName, 
 				String email, 
-				CardInformation userCardInformation,
-				WishList wishList) 
+				CardInformation userCardInformation)
+				//WishList wishList) 
 	{
 		super();
 		this.id = id;
@@ -38,7 +36,7 @@ public class User {
 		this.lName = lName;
 		this.email = email;
 		this.userCardInformation = userCardInformation;
-		this.wishList = wishList;
+		//this.wishList = wishList;
 	}
 
 	public Long getId() {
@@ -81,13 +79,13 @@ public class User {
 		this.userCardInformation = userCardInformation;
 	}
 
-	public WishList getWishList() {
-		return wishList;
-	}
-
-	public void setWishList(WishList wishList) {
-		this.wishList = wishList;
-	}
+//	public WishList getWishList() {
+//		return wishList;
+//	}
+//
+//	public void setWishList(WishList wishList) {
+//		this.wishList = wishList;
+//	}
 	
 	/*
 	 * User attributes
@@ -97,7 +95,7 @@ public class User {
 	private String lName;
 	private String email;
 	private CardInformation userCardInformation;
-	private WishList wishList; 	//Wishlist object should track a total price accumulater of the wishlist
+//	private WishList wishList; 	//Wishlist object should track a total price accumulater of the wishlist
 								//as well as a list of books
 	
 }
