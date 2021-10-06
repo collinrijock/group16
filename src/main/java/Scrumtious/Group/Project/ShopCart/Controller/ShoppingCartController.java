@@ -1,4 +1,4 @@
-package Scrumtious.Group.Project.Controller;
+package Scrumtious.Group.Project.ShopCart.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,8 +8,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.http.MediaType;
-import Scrumtious.Group.Project.Applications.*;
-import Scrumtious.Group.Project.Model.*;
+import Scrumtious.Group.Project.ShopCart.Applications.ShoppingCartRepo;
+import Scrumtious.Group.Project.ShopCart.Model.ShoppingCart;
+
 import java.util.ArrayList;
 
 
@@ -38,7 +39,7 @@ public class ShoppingCartController {
 
   }
 
-  @GetMapping("/shoppingcart/create/{userID}") //will go to repo and interact with mongodb
+  @GetMapping("/shoppingcart/create/{userID}") //grabs what's in the shopping cart
   void getAllShoppingCart(@PathVariable String userID) {
     shoppingcartRepo.save(new ShoppingCart(userID, new ArrayList<String>()));   
     System.out.println(shoppingcartRepo.findAll());
