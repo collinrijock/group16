@@ -1,4 +1,4 @@
-package Scrumtious.Group.Project.ShopCart.Model;
+package Scrumtious.Group.Project;
 
 import java.util.ArrayList;
 
