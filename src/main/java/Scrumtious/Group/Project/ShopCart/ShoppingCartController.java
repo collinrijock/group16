@@ -1,4 +1,4 @@
-package Scrumtious.Group.Project;
+package Scrumtious.Group.Project.ShopCart;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,15 +31,19 @@ public class ShoppingCartController {
   @GetMapping("/shoppingcart/{userID}") //will go to repo and interact with mongodb
   ShoppingCart getShoppingCartByUserId(@PathVariable String userID) {  //28-35 gets cart that belongs to user
 
+
     System.out.println(userID); 
     
-    return shoppingcartRepo.findByUserID(userID);
+    return shoppingcartRepo.findFirstByUserID(userID);
 
   }
 
-  @GetMapping("/shoppingcart/create/{userID}") //grabs what's in the shopping cart
+  @GetMapping("/shoppingcart/create/{userID}") //creates new cart
   void getAllShoppingCart(@PathVariable String userID) {
-    shoppingcartRepo.save(new ShoppingCart(userID, new ArrayList<String>()));   
+    if (!shoppingcartRepo.existsByUserID(userID)){
+      shoppingcartRepo.save(new ShoppingCart(userID, new ArrayList<String>()));
+    }    // if a shopping cart doesnt exist create it, else dont do anything
+       
     System.out.println(shoppingcartRepo.findAll());
 
   }
@@ -51,7 +55,18 @@ public class ShoppingCartController {
     currentCart.bookIDS = cart.bookIDS;
     shoppingcartRepo.save(currentCart);
 
-      //code
+
+  }
+
+  @PostMapping(path = "/shoppingcart/edit/{userID}")
+  public void editBookInCart(@RequestBody ShoppingCart cart, @PathVariable String userID) {
+    if (!shoppingcartRepo.existsByUserID(userID)){
+      shoppingcartRepo.save(new ShoppingCart(userID, new ArrayList<String>()));
+    }  //if a shopping cart does not exist for the user then itll create one, otherwise VVV find the first cart by user
+    ShoppingCart currentCart = shoppingcartRepo.findFirstByUserID(userID);
+    currentCart.bookIDS = cart.bookIDS;
+    shoppingcartRepo.save(currentCart);
+
   }
 
 
