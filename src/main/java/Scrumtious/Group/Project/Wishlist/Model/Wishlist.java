@@ -1,28 +1,29 @@
 package Scrumtious.Group.Project.Wishlist.Model;
 
 import org.bson.codecs.pojo.annotations.BsonProperty;
-import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
 
 import java.util.*;
 
 public class Wishlist {
-	private final ObjectId id;
+	@Id
+	public String id;
 	@BsonProperty(value = "user_id")
 	private final String userId;
 	private final String name;
 	@BsonProperty(value = "wishlist_books")
 	// change object to book when implemented
-	private HashSet<ObjectId> wishlistBooks = new HashSet<>();
+	private HashSet<String> wishlistBooks = new HashSet<>();
 
 	public Wishlist(String userId, String name) {
-		this.id = new ObjectId();
+		this.id = UUID.randomUUID().toString();
 		this.userId = userId;
 		this.name = name;
 		this.wishlistBooks = new HashSet<>();
 	}
 
 	public String getWishlistId() {
-		return this.id.toHexString();
+		return this.id;
 	}
 
 	public String getUserId() {
@@ -33,15 +34,20 @@ public class Wishlist {
 		return this.name;
 	}
 
+	public String setId(String id) {
+		this.id = id;
+		return this.id;
+	}
+
 	public void addBook(String bookId) {
-		this.wishlistBooks.add(new ObjectId(bookId));
+		this.wishlistBooks.add(bookId);
 	}
 
 	public void removeBook(String bookID) {
-		this.wishlistBooks.remove(new ObjectId(bookID));
+		this.wishlistBooks.remove(bookID);
 	}
 
-	public Set<ObjectId> getWishlistBooks() {
+	public Set<String> getWishlistBooks() {
 		return wishlistBooks;
 	}
 }
