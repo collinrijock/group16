@@ -1,4 +1,4 @@
-package Scrumtious.Group.Project.Controller;
+package Scrumtious.Group.Project.Wishlist;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.http.MediaType;
-import Scrumtious.Group.Project.Applications.*;
-import Scrumtious.Group.Project.Model.*;
 import java.util.ArrayList;
 
 @RestController
@@ -22,10 +20,10 @@ public class WishlistController {
     this.WishlistRepo = WishlistRepo;
   }
   
-  @GetMapping("/") //endpoint
-  public String index() {
-	return "Greetings from Spring Boot!";
-  }
+//  @GetMapping("/") //endpoint
+//  public String index() {
+//	return "Greetings from Spring Boot!";
+//  }
 	
   @GetMapping("/wishlist/{userID}") //will go to repo and interact with mongodb
   Wishlist getWishlistByUserId(@PathVariable String userID) {  //28-35 gets cart that belongs to user

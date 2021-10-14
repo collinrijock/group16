@@ -1,7 +1,6 @@
-package Scrumtious.Group.Project.Applications;
+package Scrumtious.Group.Project.Wishlist;
 
 import java.util.List;
-import Scrumtious.Group.Project.Model.Wishlist;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface WishlistRepo extends MongoRepository<Wishlist, String> {

@@ -1,4 +1,4 @@
-package Scrumtious.Group.Project.Model;
+package Scrumtious.Group.Project.Wishlist;
 
 import java.util.*;
 

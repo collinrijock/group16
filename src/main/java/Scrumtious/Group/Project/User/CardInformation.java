@@ -3,11 +3,11 @@ package Scrumtious.Group.Project.User;
 public class CardInformation {
 	public CardInformation(String cardNubmer, String experationDate, String ccv) {
 		super();
-		this.cardNubmer = cardNubmer;
+		this.cardNumbmer = cardNubmer;
 		this.experationDate = experationDate;
 		this.ccv = ccv;
 	}
-	private String cardNubmer;
+	private String cardNumbmer;
 	private String experationDate;
 	private String ccv;
 }

@@ -1,6 +1,16 @@
 package Scrumtious.Group.Project.User;
 
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+import Scrumtious.Group.Project.Wishlist.*;
+
+import org.springframework.data.annotation.Id;
+
+
+@Document(collection = "user")
+//@Entity
+//@Table
 public class User {
 	
 	
@@ -12,23 +22,23 @@ public class User {
 	public User(String fName, 
 				String lName, 
 				String email, 
-				CardInformation userCardInformation) 
-				//WishList wishList) 
+				CardInformation userCardInformation, 
+				Wishlist wishList) 
 	{
 		super();
 		this.fName = fName;
 		this.lName = lName;
 		this.email = email;
 		this.userCardInformation = userCardInformation;
-		//this.wishList = wishList;
+		this.wishlist = wishList;
 	}
 
-	public User(Long id, 
+	public User(String id, 
 				String fName, 
 				String lName, 
 				String email, 
-				CardInformation userCardInformation)
-				//WishList wishList) 
+				CardInformation userCardInformation,
+				Wishlist wishlist) 
 	{
 		super();
 		this.id = id;
@@ -36,14 +46,14 @@ public class User {
 		this.lName = lName;
 		this.email = email;
 		this.userCardInformation = userCardInformation;
-		//this.wishList = wishList;
+		this.wishlist = wishlist;
 	}
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -79,23 +89,36 @@ public class User {
 		this.userCardInformation = userCardInformation;
 	}
 
-//	public WishList getWishList() {
-//		return wishList;
-//	}
-//
-//	public void setWishList(WishList wishList) {
-//		this.wishList = wishList;
-//	}
+	public Wishlist getWishList() {
+		return wishlist;
+	}
+
+	public void setWishList(Wishlist wishlist) {
+		this.wishlist = wishlist;
+	}
+	
+	
+//	@Id
+//    @SequenceGenerator(
+//        name = "book_sequence",
+//        sequenceName = "book_sequence",
+//        allocationSize = 1
+//    )
+//    @GeneratedValue(
+//        strategy = GenerationType.SEQUENCE,
+//        generator = "book_sequence"
+//    )
 	
 	/*
 	 * User attributes
 	 */
-	private Long id;
+	@Id
+	private String id;
 	private String fName;
 	private String lName;
+	@Indexed(unique = true)
 	private String email;
 	private CardInformation userCardInformation;
-//	private WishList wishList; 	//Wishlist object should track a total price accumulater of the wishlist
-								//as well as a list of books
+	private Wishlist wishlist; 	
 	
 }
