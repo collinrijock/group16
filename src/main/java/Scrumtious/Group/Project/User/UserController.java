@@ -38,19 +38,19 @@ public class UserController
 		userService.addNewUser(user);
 		System.out.println(user);
 	}
-	
+
 	@GetMapping("/currentUsers/")
-    public List<User> getBooks() {
-        return userService.getUsers();
-    }
-	
+	public List<User> getBooks() {
+		return userService.getUsers();
+	}
+
 	@DeleteMapping("deleteUser/{userID}")
-    public void deleteBook(@PathVariable("userID") String userID) {
-        userService.deleteUser(userID);
-    }
-	
+	public void deleteBook(@PathVariable("userID") String userID) {
+		userService.deleteUser(userID);
+	}
+
 	@GetMapping("/searchByEmail/{email}")
-    public Object getUserByEmail(@PathVariable("email") String email) 
+	public Object getUserByEmail(@PathVariable("email") String email) 
 	{
 		StringBuilder s = new StringBuilder("Error: ");
 		try {
@@ -60,8 +60,8 @@ public class UserController
 			System.out.println(e.getMessage());
 			s.append(e.getMessage());
 		}
-		
+
 		return s;
-		
-    }
+
+	}
 }
