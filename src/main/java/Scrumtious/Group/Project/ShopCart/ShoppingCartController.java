@@ -8,9 +8,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 
+class removeBookFromCartRequest {
+  public String userId;
+  public String bookId;
+}
 
 
 @RestController
@@ -23,10 +28,6 @@ public class ShoppingCartController {
     this.shoppingcartRepo = shoppingcartRepo;
   }
   
-  @GetMapping("/") //endpoint
-  public String index() {
-	return "Greetings from Spring Boot!";
-  }
 	
   @GetMapping("/shoppingcart/{userID}") //will go to repo and interact with mongodb
   ShoppingCart getShoppingCartByUserId(@PathVariable String userID) {  //28-35 gets cart that belongs to user
@@ -48,6 +49,7 @@ public class ShoppingCartController {
 
   }
 
+
   @PostMapping(path = "/shoppingcart/update/{cartID}")
   public void modifyBookInCart(@RequestBody ShoppingCart cart, @PathVariable String cartID) {
 
@@ -66,6 +68,48 @@ public class ShoppingCartController {
     ShoppingCart currentCart = shoppingcartRepo.findFirstByUserID(userID);
     currentCart.bookIDS = cart.bookIDS;
     shoppingcartRepo.save(currentCart);
+
+  }
+
+  @PostMapping(path = "/shoppingcart/remove")
+  public ResponseEntity<String> removeBookFromShoppingCart(@RequestBody removeBookFromCartRequest request){
+    String bookId = request.bookId;
+    String userId = request.userId;
+    ShoppingCart currentCart = shoppingcartRepo.findFirstByUserID(userId);
+    
+    if (currentCart.bookIDS.contains(bookId)) {
+      currentCart.bookIDS.remove(bookId);
+      shoppingcartRepo.save(currentCart);
+      return ResponseEntity.ok("Book removed from shopping cart");
+    } else {
+      return ResponseEntity.ok("Book already removed from shopping cart");
+    }
+    
+  }
+
+  @PostMapping(path = "/shoppingcart/update")
+  public ResponseEntity<String> addBookToShoppingCart(@RequestBody removeBookFromCartRequest request){
+    String bookId = request.bookId;
+    String userId = request.userId;
+    ShoppingCart currentCart = shoppingcartRepo.findFirstByUserID(userId);
+    
+    if (!currentCart.bookIDS.contains(bookId)) {
+      currentCart.bookIDS.add(bookId);
+      shoppingcartRepo.save(currentCart);
+      return ResponseEntity.ok("Book added to shopping cart");
+    } else {
+      return ResponseEntity.ok("Book already added to shopping cart");
+    }  
+    
+  }
+
+  @GetMapping("/shoppingcart/retrieve/{userID}") 
+  ArrayList<String> getBooksInCartByUserId(@PathVariable String userID) {  
+
+
+    System.out.println(userID); 
+    
+    return shoppingcartRepo.findFirstByUserID(userID).bookIDS;
 
   }
 

@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.*;
 public class ShoppingCart {
 
   @Id
-  public String id;
+  public String shoppingCartID;
 
   public String userID;
   public ArrayList<String> bookIDS; 
