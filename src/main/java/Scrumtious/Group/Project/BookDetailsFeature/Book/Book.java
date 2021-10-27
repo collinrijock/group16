@@ -1,13 +1,15 @@
-package Scrumtious.Group.Project.BookDetailsFeature.BookDetails;
+package Scrumtious.Group.Project.BookDetailsFeature.Book;
 
 import javax.persistence.Id;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+// Collection created in database
 @Document(collection = "bookdetails")
 
 public class Book {
 
+    // Variables
     @Id
     private String id;
     private String isbn;
@@ -20,10 +22,12 @@ public class Book {
     private int yearPublished;
     private int copiesSold;
 
+    // Default constructor
     public Book() {
 
     }
 
+    // Constructor with all variables
     public Book(String id, 
                 String isbn, 
                 String name, 
@@ -46,6 +50,7 @@ public class Book {
         this.copiesSold = copiesSold;
     }
 
+    // Constructor without id (database will generate id)
     public Book(String isbn, 
                 String name, 
                 String description, 
@@ -66,6 +71,7 @@ public class Book {
         this.copiesSold = copiesSold;
     }
 
+    // Getters and Setters
     public String getBookId(){
         return id;
     }
@@ -146,21 +152,5 @@ public class Book {
         this.copiesSold = copiesSold;
     }
 
-    @Override
-    public String toString() {
-        return "Book{" +
-        ", id= " + id +
-        ", isbn= " + isbn +
-        ", name= " + name +
-        ", description= " + description +
-        ", price= " + price +
-        ", author= " + author +
-        ", genre= " + genre +
-        ", publisher= " + publisher +
-        ", yearPublished= " + yearPublished +
-        ", copiesSold= " + copiesSold +
-        '}';
-    }
-
-}
+}//end class
 
