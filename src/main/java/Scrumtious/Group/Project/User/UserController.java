@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,26 +34,82 @@ public class UserController
 	}
 
 	@PostMapping("/create/{user}")
-	public void createUser(@RequestBody User user)
+	public String createUser(@RequestBody User user)
 	{
-		userService.addNewUser(user);
-		System.out.println(user);
+		try 
+		{
+			user.checkifCardsAreInstatiation();
+			userService.addNewUser(user);
+			return "User created successfully";
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.getMessage());
+			return e.getMessage();
+		}
+		
+	}
+	
+	@PutMapping("/addCard/{email}")
+	public String addCardInfo(@RequestBody CardInformation cardInformation, @PathVariable String email)
+	{
+
+		try {
+			User user = userService.findUserByEmail(email);
+			userService.addCardInformation(user, cardInformation);			
+			return "Card was added successfully.";
+			
+		}
+		catch(Exception e) {
+			System.out.println(e.getMessage());
+			return e.getMessage();
+		}
+		
 	}
 
 	@GetMapping("/currentUsers/")
-	public List<User> getBooks() {
+	public List<User> getUsers() 
+	{
 		return userService.getUsers();
 	}
 
-	@DeleteMapping("deleteUser/{userID}")
-	public void deleteBook(@PathVariable("userID") String userID) {
-		userService.deleteUser(userID);
+	@DeleteMapping("deleteUserByID/{userID}")
+	public String deleteUserByID(@PathVariable("userID") String userID) 
+	{
+		try
+		{
+			userService.deleteUser(userID);
+			return "User deleted successfully.";
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.getMessage());
+			return e.getMessage();
+		}
+		
+	}
+	
+	@DeleteMapping("deleteUserByEmail/{email}")
+	public String deleteUserByEmail(@PathVariable String email) 
+	{
+		try
+		{
+			User user = userService.findUserByEmail(email);
+			userService.deleteUser(user.getId());
+			return "User deleted successfully.";
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.getMessage());
+			return e.getMessage();
+		}
+		
 	}
 
 	@GetMapping("/searchByEmail/{email}")
 	public Object getUserByEmail(@PathVariable("email") String email) 
 	{
-		StringBuilder s = new StringBuilder("Error: ");
+		StringBuilder s = new StringBuilder();
 		try {
 			return userService.findUserByEmail(email);
 		}
