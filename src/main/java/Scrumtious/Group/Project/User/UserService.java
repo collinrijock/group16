@@ -1,5 +1,6 @@
 package Scrumtious.Group.Project.User;
 
+import java.util.LinkedList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,15 +29,41 @@ public class UserService
 		userRepo.insert(user);
 	}
 	
+	public void checkUserForRequiredFields(User user)
+	{
+		user.checkRequiredFields();
+	}
+	
 	public void addCardInformation(User user, CardInformation cardInformation)
 	{
 		user.addUserCardInformation(cardInformation);
 		userRepo.save(user);
 	}
 	
+	public void updateAddress(User user, Address address) 
+	{
+		user.updateUserAddress(address);
+		userRepo.save(user);
+	}
+	
+	public void updateName(User user, Name name)
+	{
+		user.updateUserName(name);
+		userRepo.save(user);
+	}
+	
 	public List<User> getUsers()
 	{
 		return userRepo.findAll();
+	}
+	
+	public List<CardInformation>getPaymentCards(User user)
+	{
+		if(user.getPaymentCards() == null)
+		{
+			return new LinkedList<CardInformation>();
+		}
+		return user.getPaymentCards();
 	}
 	
 	public void deleteUser(String userID) {
@@ -47,6 +74,12 @@ public class UserService
         }
         userRepo.deleteById(userID);
     }
+	
+	public void deleteCardInformation(User user, String cardNumber)
+	{
+		user.deleteUserCardInformation(cardNumber);
+		userRepo.save(user);
+	}
 	
 	public User findUserByEmail(String email)
 	{

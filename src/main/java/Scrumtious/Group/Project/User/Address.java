@@ -3,9 +3,9 @@ package Scrumtious.Group.Project.User;
 public class Address 
 {	
 	public Address(String street, 
-				String city, 
-				String state, 
-				String zip) 
+					String city, 
+					String state, 
+					String zip) 
 	{
 		super();
 		this.street = street;
