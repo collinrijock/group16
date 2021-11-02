@@ -32,13 +32,51 @@ public class UserController
 	{
 		return "Greetings from Spring Boot! test:";
 	}
+	
+	@GetMapping("/currentUsers/")
+	public List<User> getUsers() 
+	{
+		return userService.getUsers();
+	}
 
-	@PostMapping("/create/{user}")
+	@GetMapping("/searchByEmail/{email}")
+	public Object getUserByEmail(@PathVariable("email") String email) 
+	{
+		StringBuilder s = new StringBuilder();
+		try {
+			return userService.findUserByEmail(email);
+		}
+		catch(Exception e) {
+			System.out.println(e.getMessage());
+			s.append(e.getMessage());
+		}
+
+		return s;
+	}
+	
+	
+	@GetMapping("/retrieveListOfPaymentCards/{email}")
+	public Object getPaymentCardsByEmail(@PathVariable("email") String email) 
+	{
+		try
+		{
+			User user = userService.findUserByEmail(email);
+			return userService.getPaymentCards(user);
+		}
+		catch(Exception e)
+		{
+			System.out.print(e.getMessage());
+			return e.getMessage();
+		}
+	}
+	
+	
+	@PostMapping("/create/user")
 	public String createUser(@RequestBody User user)
 	{
 		try 
 		{
-			user.checkifCardsAreInstatiation();
+			userService.checkUserForRequiredFields(user);
 			userService.addNewUser(user);
 			return "User created successfully";
 		}
@@ -50,7 +88,41 @@ public class UserController
 		
 	}
 	
-	@PutMapping("/addCard/{email}")
+	@PutMapping("/updateAddress/{email}")
+	public String addCardInfo(@RequestBody Address address, @PathVariable String email)
+	{
+
+		try {
+			User user = userService.findUserByEmail(email);
+			userService.updateAddress(user, address);			
+			return "address was added successfully.";
+			
+		}
+		catch(Exception e) {
+			System.out.println(e.getMessage());
+			return e.getMessage();
+		}
+		
+	}
+	
+	@PutMapping("/updateName/{email}")
+	public String addCardInfo(@RequestBody Name name, @PathVariable String email)
+	{
+
+		try {
+			User user = userService.findUserByEmail(email);
+			userService.updateName(user, name);			
+			return "Name was added successfully.";
+			
+		}
+		catch(Exception e) {
+			System.out.println(e.getMessage());
+			return e.getMessage();
+		}
+		
+	}
+	
+	@PutMapping("/addPaymentCard/{email}")
 	public String addCardInfo(@RequestBody CardInformation cardInformation, @PathVariable String email)
 	{
 
@@ -66,11 +138,23 @@ public class UserController
 		}
 		
 	}
-
-	@GetMapping("/currentUsers/")
-	public List<User> getUsers() 
+	
+	@DeleteMapping("deletePaymentCard/{email}/{cardNumber}")
+	public String deleteUserPaymentCard(@PathVariable String email, 
+										@PathVariable String cardNumber ) 
 	{
-		return userService.getUsers();
+		try
+		{
+			User user = userService.findUserByEmail(email);
+			userService.deleteCardInformation(user, cardNumber);
+			return "Payment card was deleted successfully.";
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.getMessage());
+			return e.getMessage();
+		}
+		
 	}
 
 	@DeleteMapping("deleteUserByID/{userID}")
@@ -106,19 +190,4 @@ public class UserController
 		
 	}
 
-	@GetMapping("/searchByEmail/{email}")
-	public Object getUserByEmail(@PathVariable("email") String email) 
-	{
-		StringBuilder s = new StringBuilder();
-		try {
-			return userService.findUserByEmail(email);
-		}
-		catch(Exception e) {
-			System.out.println(e.getMessage());
-			s.append(e.getMessage());
-		}
-
-		return s;
-
-	}
 }
