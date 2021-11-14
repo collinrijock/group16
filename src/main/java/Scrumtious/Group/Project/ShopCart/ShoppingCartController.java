@@ -50,26 +50,6 @@ public class ShoppingCartController {
   }
 
 
-  @PostMapping(path = "/shoppingcart/update/{cartID}")
-  public void modifyBookInCart(@RequestBody ShoppingCart cart, @PathVariable String cartID) {
-
-    ShoppingCart currentCart = shoppingcartRepo.findById(cartID).orElse(new ShoppingCart());
-    currentCart.bookIDS = cart.bookIDS;
-    shoppingcartRepo.save(currentCart);
-
-
-  }
-
-  @PostMapping(path = "/shoppingcart/edit/{userID}")
-  public void editBookInCart(@RequestBody ShoppingCart cart, @PathVariable String userID) {
-    if (!shoppingcartRepo.existsByUserID(userID)){
-      shoppingcartRepo.save(new ShoppingCart(userID, new ArrayList<String>()));
-    }  //if a shopping cart does not exist for the user then itll create one, otherwise VVV find the first cart by user
-    ShoppingCart currentCart = shoppingcartRepo.findFirstByUserID(userID);
-    currentCart.bookIDS = cart.bookIDS;
-    shoppingcartRepo.save(currentCart);
-
-  }
 
   @PostMapping(path = "/shoppingcart/remove")
   public ResponseEntity<String> removeBookFromShoppingCart(@RequestBody removeBookFromCartRequest request){
