@@ -1,6 +1,5 @@
 package Scrumtious.Group.Project.Wishlist;
 
-
 import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.springframework.data.annotation.Id;
 

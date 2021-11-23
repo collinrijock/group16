@@ -98,7 +98,7 @@ public class WishlistController {
     return new ResponseEntity<>("Wishlist with name " + name + " does not exist", HttpStatus.NOT_FOUND);
   }
 
-  @PostMapping(path = "/wishlist/move")
+ /* @PostMapping(path = "/wishlist/move")
   public ResponseEntity<String> moveBookToShoppingCart(@RequestBody moveBookToShoppingCartRequest request) {
     String userId = request.userId;
     String wishlistName = request.wishlistName;
@@ -113,7 +113,7 @@ public class WishlistController {
         if (currentCart == null) {
           currentCart = new ShoppingCart(userId, bookList);
         } else {
-          currentCart.bookIDS.add(bookId);
+          currentCart.getBookIDS().add(bookId);
         }
         shoppingCartRepo.save(currentCart);
         return ResponseEntity.ok("Book moved to shopping cart");
@@ -121,5 +121,5 @@ public class WishlistController {
     }
     return new ResponseEntity<>("Failed to move book to shopping cart.", HttpStatus.NOT_FOUND);
   }
-
+*/
 }
