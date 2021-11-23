@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.Id;
+import org.springframework.data.annotation.Id;
 import javax.persistence.Table;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
@@ -20,6 +20,7 @@ public class ShoppingCart {
 
   @Id
   private String shoppingCartID;
+
   private String userID; 
 
   @ElementCollection
@@ -34,6 +35,14 @@ public class ShoppingCart {
   public ShoppingCart(String userID, HashSet<Book> books) {
     this.userID = userID;
     this.books = books;
+  }
+
+  public String getShoppingCartID(){
+    return shoppingCartID;
+  }
+
+  public void setShoppingCartID(String shoppingCartID){
+    this.shoppingCartID = shoppingCartID;
   }
 
   public String getUserID() {

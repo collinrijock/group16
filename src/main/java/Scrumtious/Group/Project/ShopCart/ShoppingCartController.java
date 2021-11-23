@@ -68,32 +68,9 @@ public class ShoppingCartController {
   public ResponseEntity<String> removeBookFromShoppingCart(@RequestBody removeBookFromCartRequest request){
     String bookISBN = request.bookISBN;
     String userID = request.userID;
-    
     ShoppingCart currentCart = shoppingcartRepo.findFirstByUserID(userID);
-
-    List<Book> bookToRemove = booksRepository.findBookByIsbn(bookISBN);
-    
-    
-    if (shoppingcartRepo.existsByUserID(userID) && currentCart.getBooks().containsAll(bookToRemove)) {
-      currentCart.getBooks().removeAll(bookToRemove);
-      shoppingcartRepo.save(currentCart);
-      return ResponseEntity.ok("Book removed from shopping cart");
-    } else {
-      return ResponseEntity.ok("Book already removed from shopping cart");
-    }
-    
-  }
-
-  @PostMapping(path = "/shoppingcart/update")
-  public ResponseEntity<String> addBookToShoppingCart(@RequestBody removeBookFromCartRequest request){
-    String bookISBN = request.bookISBN;
-    String userID = request.userID;
-    ShoppingCart currentCart = shoppingcartRepo.findFirstByUserID(userID);
-
-
-    if(currentCart == null){
-      return new ResponseEntity<>("Invalid cart for user.", HttpStatus.NOT_FOUND); 
-    }
+    System.out.println(currentCart.getUserID());
+    System.out.println(currentCart.getShoppingCartID());
 
     List<Book> allBooks = booksRepository.findAll();
 
@@ -103,10 +80,50 @@ public class ShoppingCartController {
 
     Set<Book> currentBooksInCart = currentCart.getBooks();
     
-    if ((currentBooksInCart != null) && (currentBooksInCart.size()>0)){
+    if ((currentBooksInCart != null)){
+
+      for(Book i : currentBooksInCart){ //for all books in cart
+          if (i.getisbn().equals(bookISBN)){ // if repo ISBN = bookISBN
+            currentBooksInCart.remove(i); 
+            System.out.println(currentCart.getShoppingCartID());//add book to cart
+            shoppingcartRepo.save(currentCart);
+          return ResponseEntity.ok("Book removed from shopping cart");
+        }else {
+          return ResponseEntity.ok("Book already removed from shopping cart");
+        }
+      }
+     }else{
+    
+          return ResponseEntity.ok("Empty cart.");     
+    }
+      
+
+    return new ResponseEntity<>("Failed to remove book from shopping cart.", HttpStatus.NOT_FOUND);
+    
+  }
+
+  @PostMapping(path = "/shoppingcart/update")
+  public ResponseEntity<String> addBookToShoppingCart(@RequestBody removeBookFromCartRequest request){
+    String bookISBN = request.bookISBN;
+    String userID = request.userID;
+    ShoppingCart currentCart = shoppingcartRepo.findFirstByUserID(userID);
+    System.out.println(currentCart.getUserID());
+    System.out.println(currentCart.getShoppingCartID());
+
+    List<Book> allBooks = booksRepository.findAll();
+
+    if(allBooks == null){
+      return new ResponseEntity<>("Could not find book repo.", HttpStatus.NOT_FOUND); 
+    }
+
+    Set<Book> currentBooksInCart = currentCart.getBooks();
+    
+    if ((currentBooksInCart != null)){
+      System.out.println("Cart exists");
       for(Book i : allBooks){ // for each book in repository
         if (i.getisbn().equals(bookISBN)){ // if repo ISBN = bookISBN
-          currentBooksInCart.add(i); //add book to cart
+          currentBooksInCart.add(i); 
+          System.out.println(currentCart.getShoppingCartID());//add book to cart
           shoppingcartRepo.save(currentCart); 
         }
       }
@@ -120,6 +137,7 @@ public class ShoppingCartController {
       } 
 
     }else{
+      System.out.println("New Cart.");
       for(Book i : allBooks){
         if (i.getisbn().equals(bookISBN)){
           HashSet<Book> newBooks = new HashSet<Book>();
