@@ -23,7 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-class removeBookFromCartRequest {
+class cartRequest {
   public String userID;
   public String bookISBN;
 }
@@ -65,7 +65,7 @@ public class ShoppingCartController {
 
 
   @PostMapping(path = "/shoppingcart/remove")
-  public ResponseEntity<String> removeBookFromShoppingCart(@RequestBody removeBookFromCartRequest request){
+  public ResponseEntity<String> removeBookFromShoppingCart(@RequestBody cartRequest request){
     String bookISBN = request.bookISBN;
     String userID = request.userID;
     ShoppingCart currentCart = shoppingcartRepo.findFirstByUserID(userID);
@@ -103,7 +103,7 @@ public class ShoppingCartController {
   }
 
   @PostMapping(path = "/shoppingcart/update")
-  public ResponseEntity<String> addBookToShoppingCart(@RequestBody removeBookFromCartRequest request){
+  public ResponseEntity<String> addBookToShoppingCart(@RequestBody cartRequest request){
     String bookISBN = request.bookISBN;
     String userID = request.userID;
     ShoppingCart currentCart = shoppingcartRepo.findFirstByUserID(userID);
