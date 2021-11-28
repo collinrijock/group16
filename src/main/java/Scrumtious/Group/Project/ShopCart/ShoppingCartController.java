@@ -7,8 +7,12 @@ import org.springframework.web.bind.annotation.PostMapping; //for cart**
 import org.springframework.web.bind.annotation.PutMapping;  //best for cart
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpStatusCodeException;
 
 import Scrumtious.Group.Project.BookDetails.Book.BookRepository;
+import Scrumtious.Group.Project.User.User;
+import Scrumtious.Group.Project.User.UserRepository;
+import Scrumtious.Group.Project.User.UserService;
 import Scrumtious.Group.Project.BookDetails.Book.Book;
 import Scrumtious.Group.Project.BookDetails.Book.BookController;
 
@@ -35,10 +39,14 @@ public class ShoppingCartController {
 
   private final ShoppingCartRepo shoppingcartRepo;
   private final BookRepository booksRepository;
+  private final UserRepository userRepo;
+  private final UserService userService;
 
-  ShoppingCartController(ShoppingCartRepo shoppingcartRepo, BookRepository booksRepository) {
+  ShoppingCartController(ShoppingCartRepo shoppingcartRepo, BookRepository booksRepository, UserRepository userRepo, UserService userService) {
     this.shoppingcartRepo = shoppingcartRepo;
     this.booksRepository = booksRepository;
+    this.userRepo = userRepo;
+    this.userService = userService;
   }
   
 	
@@ -52,13 +60,27 @@ public class ShoppingCartController {
   }
 
 
-  @GetMapping("/shoppingcart/create/{userID}") //creates new cart
-  void createShoppingCart(@PathVariable String userID) {
-    if (!shoppingcartRepo.existsByUserID(userID)){
-      shoppingcartRepo.save(new ShoppingCart(userID, new HashSet<Book>()));
-    }    // if a shopping cart doesnt exist create it, else dont do anything
-       
+  @GetMapping("/shoppingcart/create") //creates new cart
+  public ResponseEntity<String> createShoppingCart(@RequestBody cartRequest request) {
+    String userID = request.userID;
+
+    try{
+      User currentUser = userService.findUserByEmail(userID);
+      if(currentUser == null){
+        throw new IllegalStateException(
+                "User with id " + userID + " does not exist."
+            );
+      }else if (!shoppingcartRepo.existsByUserID(userID)){
+        shoppingcartRepo.save(new ShoppingCart(userID, new HashSet<Book>()));
+        return ResponseEntity.ok("Shopping cart created for user.");
+      }    // if a shopping cart doesnt exist create it, else dont do anything
+    }catch(IllegalStateException exception){
+      return ResponseEntity.ok(exception.getMessage());
+    }
+    
+
     System.out.println(shoppingcartRepo.findAll());
+    return new ResponseEntity<>("Failed to create cart because cart already exists or else.", HttpStatus.NOT_FOUND);  
 
   }
 
