@@ -28,6 +28,7 @@ public class Book{
     private String publisher;
     private int yearPublished;
     private int copiesSold;
+    private double rating;
 
     // Variable with reference to authors
     @ElementCollection
@@ -49,6 +50,7 @@ public class Book{
                 String publisher, 
                 int yearPublished, 
                 int copiesSold,
+                double rating,
                 Set<Author> author){
         this.id = id;
         this.isbn = isbn;
@@ -60,6 +62,7 @@ public class Book{
         this.yearPublished = yearPublished;
         this.copiesSold = copiesSold;
         this.author = author;
+        this.rating = rating;
     }
 
     public String getBookId() {
@@ -140,6 +143,14 @@ public class Book{
 
     public void setAuthors(Set<Author> author) {
         this.author = author;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 
 
