@@ -1,5 +1,6 @@
 package Scrumtious.Group.Project.BookDetails.Book;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -13,3 +14,4 @@ public interface BookRepository extends MongoRepository<Book, String> {
    List<Book> findByAuthorId(String id);
 
 }
+

@@ -34,21 +34,21 @@ public class UserService
 		user.checkRequiredFields();
 	}
 	
-	public void addCardInformation(User user, CardInformation cardInformation)
+	public void addUserCardInformation(User user, CardInformation cardInformation)
 	{
-		user.addUserCardInformation(cardInformation);
+		user.addCardInformation(cardInformation);
 		userRepo.save(user);
 	}
 	
-	public void updateAddress(User user, Address address) 
+	public void updateUserAddress(User user, Address address) 
 	{
-		user.updateUserAddress(address);
+		user.updateAddress(address);
 		userRepo.save(user);
 	}
 	
-	public void updateName(User user, Name name)
+	public void updateUserName(User user, Name name)
 	{
-		user.updateUserName(name);
+		user.updateName(name);
 		userRepo.save(user);
 	}
 	
@@ -56,8 +56,8 @@ public class UserService
 	{
 		return userRepo.findAll();
 	}
-	
-	public List<CardInformation>getPaymentCards(User user)
+
+	public List<CardInformation>getUserPaymentCards(User user)
 	{
 		if(user.getPaymentCards() == null)
 		{
@@ -75,9 +75,9 @@ public class UserService
         userRepo.deleteById(userID);
     }
 	
-	public void deleteCardInformation(User user, String cardNumber)
+	public void deleteUserCardInformation(User user, String cardNumber)
 	{
-		user.deleteUserCardInformation(cardNumber);
+		user.deleteCardInformation(cardNumber);
 		userRepo.save(user);
 	}
 	
@@ -103,3 +103,4 @@ public class UserService
 	}
 
 }
+

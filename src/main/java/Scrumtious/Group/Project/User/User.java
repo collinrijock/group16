@@ -158,7 +158,9 @@ public class User {
 	 * This method adds a payment card as long as it does not already exist
 	 * @param cardInformation
 	 */
-	public void addUserCardInformation(CardInformation cardInformation) 
+
+	public void addCardInformation(CardInformation cardInformation) 
+
 	{
 		checkifListForPaymentCardsExist();
 		for(int i = 0 ; i < paymentCards.size() ; i++)
@@ -169,13 +171,15 @@ public class User {
 			}
 		}
 		paymentCards.add(cardInformation);
+
 	}
 	
 	/**
 	 * This method deletes a payment card if exists
 	 * @param cardNumber
 	 */
-	public void deleteUserCardInformation(String cardNumber)
+
+	public void deleteCardInformation(String cardNumber)
 	{
 		Boolean deletedSuccessfully = false;
 		if((getPaymentCards() != null) && (getPaymentCards().size() > 0))
@@ -201,12 +205,14 @@ public class User {
 		
 	}
 	
-	public void updateUserAddress(Address address)
+	public void updateAddress(Address address)
+
 	{
 		setAddress(address);
 	}
 	
-	public void updateUserName(Name name)
+
+	public void updateName(Name name)
 	{
 		setName(name);
 	}
@@ -348,3 +354,4 @@ public class User {
 	private Address address;
 
 }
+

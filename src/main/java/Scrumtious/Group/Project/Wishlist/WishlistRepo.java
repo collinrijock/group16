@@ -13,3 +13,4 @@ public interface WishlistRepo extends MongoRepository<Wishlist, String> {
   public List<Wishlist> findAll();
 
 }
+

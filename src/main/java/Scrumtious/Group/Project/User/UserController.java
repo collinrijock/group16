@@ -42,16 +42,15 @@ public class UserController
 	@GetMapping("/searchByEmail/{email}")
 	public Object getUserByEmail(@PathVariable("email") String email) 
 	{
-		StringBuilder s = new StringBuilder();
-		try {
+		try 
+		{
 			return userService.findUserByEmail(email);
 		}
-		catch(Exception e) {
+		catch(Exception e) 
+		{
 			System.out.println(e.getMessage());
-			s.append(e.getMessage());
+			return e.getMessage();
 		}
-
-		return s;
 	}
 	
 	
@@ -61,7 +60,8 @@ public class UserController
 		try
 		{
 			User user = userService.findUserByEmail(email);
-			return userService.getPaymentCards(user);
+			return userService.getUserPaymentCards(user);
+
 		}
 		catch(Exception e)
 		{
@@ -89,16 +89,17 @@ public class UserController
 	}
 	
 	@PutMapping("/updateAddress/{email}")
-	public String addCardInfo(@RequestBody Address address, @PathVariable String email)
+	public String updateUserAddress(@RequestBody Address address, @PathVariable String email)
 	{
 
-		try {
+		try 
+		{
 			User user = userService.findUserByEmail(email);
-			userService.updateAddress(user, address);			
+			userService.updateUserAddress(user, address);			
 			return "address was added successfully.";
-			
 		}
-		catch(Exception e) {
+		catch(Exception e) 
+		{
 			System.out.println(e.getMessage());
 			return e.getMessage();
 		}
@@ -106,16 +107,17 @@ public class UserController
 	}
 	
 	@PutMapping("/updateName/{email}")
-	public String addCardInfo(@RequestBody Name name, @PathVariable String email)
+	public String updateUserName(@RequestBody Name name, @PathVariable String email)
 	{
 
-		try {
+		try 
+		{
 			User user = userService.findUserByEmail(email);
-			userService.updateName(user, name);			
+			userService.updateUserName(user, name);			
 			return "Name was added successfully.";
-			
 		}
-		catch(Exception e) {
+		catch(Exception e) 
+		{
 			System.out.println(e.getMessage());
 			return e.getMessage();
 		}
@@ -123,12 +125,12 @@ public class UserController
 	}
 	
 	@PutMapping("/addPaymentCard/{email}")
-	public String addCardInfo(@RequestBody CardInformation cardInformation, @PathVariable String email)
+	public String addUserCardInfo(@RequestBody CardInformation cardInformation, @PathVariable String email)
 	{
 
 		try {
 			User user = userService.findUserByEmail(email);
-			userService.addCardInformation(user, cardInformation);			
+			userService.addUserCardInformation(user, cardInformation);			
 			return "Card was added successfully.";
 			
 		}
@@ -146,7 +148,7 @@ public class UserController
 		try
 		{
 			User user = userService.findUserByEmail(email);
-			userService.deleteCardInformation(user, cardNumber);
+			userService.deleteUserCardInformation(user, cardNumber);
 			return "Payment card was deleted successfully.";
 		}
 		catch(Exception e)
@@ -191,3 +193,4 @@ public class UserController
 	}
 
 }
+
