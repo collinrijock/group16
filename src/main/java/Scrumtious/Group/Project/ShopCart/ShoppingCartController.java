@@ -1,28 +1,20 @@
 package Scrumtious.Group.Project.ShopCart;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping; //for cart**
-import org.springframework.web.bind.annotation.PutMapping;  //best for cart
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.HttpStatusCodeException;
-
 import Scrumtious.Group.Project.BookDetails.Book.BookRepository;
 import Scrumtious.Group.Project.User.User;
 import Scrumtious.Group.Project.User.UserRepository;
 import Scrumtious.Group.Project.User.UserService;
 import Scrumtious.Group.Project.BookDetails.Book.Book;
-import Scrumtious.Group.Project.BookDetails.Book.BookController;
-
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.hibernate.query.criteria.internal.expression.function.CurrentDateFunction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;

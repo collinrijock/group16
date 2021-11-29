@@ -1,14 +1,8 @@
 package Scrumtious.Group.Project.ShopCart;
 
-import java.util.ArrayList;
-
-
 import java.util.HashSet;
-import java.util.Set;
 import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import org.springframework.data.annotation.Id;
-import javax.persistence.Table;
+import org.springframework.data.annotation.Id; //DON'T REMOVE
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import org.springframework.data.mongodb.core.mapping.*;
