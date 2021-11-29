@@ -1,13 +1,21 @@
-package Scrumtious.Group.Project.BookDetailsFeature.Book;
+package Scrumtious.Group.Project.BookDetails.Book;
 
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
-import org.springframework.data.mongodb.core.mapping.Document;
+import Scrumtious.Group.Project.BookDetails.Author.Author;
 
 // Collection created in database
-@Document(collection = "bookdetails")
+@Entity
+@Table(name = "BOOK")
 
-public class Book {
+
+public class Book{
 
     // Variables
     @Id
@@ -16,67 +24,49 @@ public class Book {
     private String name;
     private String description;
     private double price;
-    private String author;
     private String genre;
     private String publisher;
     private int yearPublished;
     private int copiesSold;
 
+    // Variable with reference to authors
+    @ElementCollection
+    @DBRef
+    private Set<Author> author = new HashSet<>();
+
     // Default constructor
     public Book() {
-
+        
     }
 
-    // Constructor with all variables
-    public Book(String id, 
+    // Constructor
+    public Book(String id,
                 String isbn, 
                 String name, 
                 String description, 
                 double price, 
-                String author, 
                 String genre, 
                 String publisher, 
                 int yearPublished, 
-                int copiesSold){
+                int copiesSold,
+                Set<Author> author){
         this.id = id;
         this.isbn = isbn;
         this.name = name;
         this.description = description;
         this.price = price;
-        this.author = author;
         this.genre = genre;
         this.publisher = publisher;
         this.yearPublished = yearPublished;
         this.copiesSold = copiesSold;
-    }
-
-    // Constructor without id (database will generate id)
-    public Book(String isbn, 
-                String name, 
-                String description, 
-                double price, 
-                String author, 
-                String genre, 
-                String publisher, 
-                int yearPublished, 
-                int copiesSold){
-        this.isbn = isbn;
-        this.name = name;
-        this.description = description;
-        this.price = price;
         this.author = author;
-        this.genre = genre;
-        this.publisher = publisher;
-        this.yearPublished = yearPublished;
-        this.copiesSold = copiesSold;
     }
 
-    // Getters and Setters
-    public String getBookId(){
+    public String getBookId() {
         return id;
     }
 
-    public void setBookId(String id){
+    public void setBookId(String id) {
         this.id = id;
     }
 
@@ -112,14 +102,6 @@ public class Book {
         this.price = price;
     }
 
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
     public String getGenre() {
         return genre;
     }
@@ -152,5 +134,12 @@ public class Book {
         this.copiesSold = copiesSold;
     }
 
-}//end class
+    public Set<Author> getAuthors() {
+        return author;
+    }
 
+    public void setAuthors(Set<Author> author) {
+        this.author = author;
+    }
+
+}//end class
