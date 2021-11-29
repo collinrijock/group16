@@ -1,7 +1,7 @@
 package Scrumtious.Group.Project.User;
 
+import java.util.LinkedList;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -26,6 +26,29 @@ public class UserService
 
 	public void addNewUser(User user)
 	{
+		userRepo.insert(user);
+	}
+	
+	public void checkUserForRequiredFields(User user)
+	{
+		user.checkRequiredFields();
+	}
+	
+	public void addUserCardInformation(User user, CardInformation cardInformation)
+	{
+		user.addCardInformation(cardInformation);
+		userRepo.save(user);
+	}
+	
+	public void updateUserAddress(User user, Address address) 
+	{
+		user.updateAddress(address);
+		userRepo.save(user);
+	}
+	
+	public void updateUserName(User user, Name name)
+	{
+		user.updateName(name);
 		userRepo.save(user);
 	}
 	
@@ -34,16 +57,29 @@ public class UserService
 		return userRepo.findAll();
 	}
 	
+	public List<CardInformation>getUserPaymentCards(User user)
+	{
+		if(user.getPaymentCards() == null)
+		{
+			return new LinkedList<CardInformation>();
+		}
+		return user.getPaymentCards();
+	}
+	
 	public void deleteUser(String userID) {
         boolean exists = userRepo.existsById(userID);
 
         if(!exists) {
-            throw new IllegalStateException(
-                "user with id " + userID + " does not exist"
-            );
+            throw new IllegalStateException("user with id " + userID + " does not exist");
         }
         userRepo.deleteById(userID);
     }
+	
+	public void deleteUserCardInformation(User user, String cardNumber)
+	{
+		user.deleteCardInformation(cardNumber);
+		userRepo.save(user);
+	}
 	
 	public User findUserByEmail(String email)
 	{
@@ -55,11 +91,11 @@ public class UserService
 		
 		if(userList.size() > 1)
 		{
-			throw new IllegalStateException("Too many users with email \"" + email + "\"");
+			throw new IllegalStateException("Error: Too many users with email \"" + email + "\"");
 		} 
 		else if(userList.size() == 0)
 		{
-			throw new IllegalStateException("No users found with email \"" + email + "\"");
+			throw new IllegalStateException("Error: No users found with email \"" + email + "\"");
 		}
 		
 		//If found, only one user with email should be found.
