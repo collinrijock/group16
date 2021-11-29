@@ -51,7 +51,6 @@ public class UserController
 			System.out.println(e.getMessage());
 			return e.getMessage();
 		}
-
 	}
 	
 	
@@ -62,6 +61,7 @@ public class UserController
 		{
 			User user = userService.findUserByEmail(email);
 			return userService.getUserPaymentCards(user);
+
 		}
 		catch(Exception e)
 		{
@@ -193,3 +193,4 @@ public class UserController
 	}
 
 }
+
