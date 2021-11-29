@@ -18,6 +18,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 @RestController
 @RequestMapping(path = "api")
 public class BookController {
@@ -27,6 +30,9 @@ public class BookController {
 
     @Autowired
     AuthorRepository authorRepository;
+
+    @Autowired
+    BookService bookService;
 
     // ==============================================================================
     // Post Requests
@@ -122,6 +128,34 @@ public class BookController {
         }
         // if book exists, delete book
 	    bookRepository.deleteById(bookId);
+    }
+
+    // ==============================================================================
+    // Book Browsing/Sorting Implementation 
+    // ==============================================================================
+
+    // Get book by genre 
+    @GetMapping("/book/genre/{genre}")
+    public List<Book> getBookByGenre(@PathVariable(value = "genre") String genre) {
+        return bookRepository.findByGenre(genre);
+    }
+
+    // Get book by top sellers
+    @GetMapping("/book/topTen")
+    public List<Book> getBasedOnCopiesSold() {
+        return bookRepository.findTop10ByOrderByCopiesSoldDesc();
+    }
+
+    // Get book by rating 
+    @GetMapping("/book/rating/{rating}")
+    public List<Book> getBasedOnRating(@PathVariable(value = "rating") double rating) {
+        return bookRepository.findAllByRatingIsGreaterThanEqual(rating);
+    }
+
+    // Get N number of books per page 
+    @GetMapping("/book/pages")
+    public Page<Book> getPage(Pageable page) {
+        return bookService.getPages(page);
     }
 
 }// end class
