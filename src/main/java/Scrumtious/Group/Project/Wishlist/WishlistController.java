@@ -8,13 +8,21 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import Scrumtious.Group.Project.ShopCart.ShoppingCartRepo;
+import Scrumtious.Group.Project.ShopCart.ShoppingCartController;
+import Scrumtious.Group.Project.ShopCart.ShoppingCart;
+import Scrumtious.Group.Project.BookDetails.Book.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.ArrayList;
+import Scrumtious.Group.Project.BookDetails.Book.BookRepository;
+
+
 //import Scrumtious.Group.Project.ShopCart.ShoppingCart;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.http.MediaType;
 
-import java.util.List;
-import java.util.ArrayList;
 
 class CreateWishlistRequest {
   public String userId;
@@ -39,10 +47,13 @@ public class WishlistController {
 
   private final WishlistRepo wishlistRepo;
   private final ShoppingCartRepo shoppingCartRepo;
+  private final BookRepository booksRepository;
 
-  WishlistController(WishlistRepo wishlistRepo, ShoppingCartRepo shoppingCartRepo) {
+
+  WishlistController(WishlistRepo wishlistRepo, BookRepository booksRepository, ShoppingCartRepo shoppingCartRepo) {
     this.wishlistRepo = wishlistRepo;
     this.shoppingCartRepo = shoppingCartRepo;
+    this.booksRepository = booksRepository;
   }
 
   @GetMapping("/wishlist/{userId}")
@@ -98,7 +109,57 @@ public class WishlistController {
     return new ResponseEntity<>("Wishlist with name " + name + " does not exist", HttpStatus.NOT_FOUND);
   }
 
- /* @PostMapping(path = "/wishlist/move")
+  public ResponseEntity<String> addBookToShoppingCart(String bookId, String userId) {
+    
+    ShoppingCart currentCart = shoppingCartRepo.findFirstByUserID(userId);
+    System.out.println(currentCart.getUserID());
+    System.out.println(currentCart.getShoppingCartID());
+
+    List<Book> allBooks = booksRepository.findAll();
+
+    if(allBooks == null){
+      return new ResponseEntity<>("Could not find book repo.", HttpStatus.NOT_FOUND); 
+    }
+
+    Set<Book> currentBooksInCart = currentCart.getBooks();
+    
+    if ((currentBooksInCart != null)) {
+
+      for(Book i : allBooks){ // for each book in repository
+        if (i.getBookId().equals(bookId)){ // if repo ISBN = bookISBN
+          currentBooksInCart.add(i); 
+          System.out.println(currentCart.getShoppingCartID());//add book to cart
+          shoppingCartRepo.save(currentCart); 
+        }
+      }
+
+      for(Book i : currentBooksInCart){ //for all books in cart
+        if (!i.getBookId().equals(bookId)){
+          return ResponseEntity.ok("Book added to shopping cart");
+        }else {
+          return ResponseEntity.ok("Book already added to shopping cart");
+        }
+      } 
+
+    }else{
+      System.out.println("New Cart.");
+      for(Book i : allBooks){
+        if (i.getBookId().equals(bookId)){
+          HashSet<Book> newBooks = new HashSet<Book>();
+          newBooks.add(i);
+          currentCart.setBooks(newBooks);
+          shoppingCartRepo.save(currentCart);    
+          return ResponseEntity.ok("Book added shopping cart");     
+        }
+      }
+      
+  }
+
+    return new ResponseEntity<>("Failed to add book to shopping cart.", HttpStatus.NOT_FOUND);
+    
+  }
+
+  @PostMapping(path = "/wishlist/move")
   public ResponseEntity<String> moveBookToShoppingCart(@RequestBody moveBookToShoppingCartRequest request) {
     String userId = request.userId;
     String wishlistName = request.wishlistName;
@@ -107,20 +168,11 @@ public class WishlistController {
     for (Wishlist wishlist : wishlists) {
       if (wishlist.getName().equals(wishlistName)) {
         wishlist.removeBook(bookId);
-        ArrayList<String> bookList = new ArrayList<>();
-        bookList.add(bookId);
-        ShoppingCart currentCart = shoppingCartRepo.findFirstByUserID(userId);  //cart gets updated by first instance of cart found for this user
-        if (currentCart == null) {
-          currentCart = new ShoppingCart(userId, bookList);
-        } else {
-          currentCart.getBookIDS().add(bookId);
-        }
-        shoppingCartRepo.save(currentCart);
-        return ResponseEntity.ok("Book moved to shopping cart");
+        addBookToShoppingCart(bookId, userId);
+        return new ResponseEntity<String>("Book added to cart.", HttpStatus.ACCEPTED);
       }
     }
-    return new ResponseEntity<>("Failed to move book to shopping cart.", HttpStatus.NOT_FOUND);
+    return new ResponseEntity<String>("Failed to move book to shopping cart.", HttpStatus.NOT_FOUND);
   }
-*/
 }
 
