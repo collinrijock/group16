@@ -28,7 +28,7 @@ public class AuthorController {
     // * Checklist 3 *
     // Create new author
     @PostMapping("/author/create")
-	public Author createBook(@Valid @RequestBody Author author) {
+	public Author createAuthor(@Valid @RequestBody Author author) {
 	    return authorRepository.save(author);
 	}
 
