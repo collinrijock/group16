@@ -1,4 +1,3 @@
-
 package Scrumtious.Group.Project.BookDetails.Author;
 
 import java.util.List;
@@ -10,5 +9,6 @@ import org.springframework.stereotype.Repository;
 public interface AuthorRepository extends MongoRepository<Author, String> {
 
     List<Author> findByAuthorId(List<String> id);
-    
+
 }
+

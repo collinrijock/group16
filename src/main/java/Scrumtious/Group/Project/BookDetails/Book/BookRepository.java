@@ -7,8 +7,19 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BookRepository extends MongoRepository<Book, String> {
 
-   List<Book> findBookByIsbn(String isbn);
+    // find books by isbn
+    List<Book> findBookByIsbn(String isbn);
 
-   List<Book> findByAuthorId(String id);
+    // find books by author 
+    List<Book> findByAuthorId(String id);
+
+    // find books by genre 
+    List<Book> findByGenre(String genre);
+
+    // find books by top sellers 
+    List<Book> findTop10ByOrderByCopiesSoldDesc();
+
+    // find books by rating 
+    List<Book> findAllByRatingIsGreaterThanEqual(double rating);
 
 }
