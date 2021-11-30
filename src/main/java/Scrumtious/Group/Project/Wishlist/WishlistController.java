@@ -17,12 +17,10 @@ import java.util.Set;
 import java.util.ArrayList;
 import Scrumtious.Group.Project.BookDetails.Book.BookRepository;
 
-
 //import Scrumtious.Group.Project.ShopCart.ShoppingCart;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.http.MediaType;
-
 
 class CreateWishlistRequest {
   public String userId;
@@ -39,6 +37,7 @@ class moveBookToShoppingCartRequest {
   public String userId;
   public String wishlistName;
   public String bookId;
+  public String userEmail;
 }
 
 @RestController
@@ -48,7 +47,6 @@ public class WishlistController {
   private final WishlistRepo wishlistRepo;
   private final ShoppingCartRepo shoppingCartRepo;
   private final BookRepository booksRepository;
-
 
   WishlistController(WishlistRepo wishlistRepo, BookRepository booksRepository, ShoppingCartRepo shoppingCartRepo) {
     this.wishlistRepo = wishlistRepo;
@@ -109,70 +107,66 @@ public class WishlistController {
     return new ResponseEntity<>("Wishlist with name " + name + " does not exist", HttpStatus.NOT_FOUND);
   }
 
-  public ResponseEntity<String> addBookToShoppingCart(String bookId, String userId) {
-    
-    ShoppingCart currentCart = shoppingCartRepo.findFirstByUserID(userId);
-    System.out.println(currentCart.getUserID());
-    System.out.println(currentCart.getShoppingCartID());
-
-    List<Book> allBooks = booksRepository.findAll();
-
-    if(allBooks == null){
-      return new ResponseEntity<>("Could not find book repo.", HttpStatus.NOT_FOUND); 
-    }
-
-    Set<Book> currentBooksInCart = currentCart.getBooks();
-    
-    if ((currentBooksInCart != null)) {
-
-      for(Book i : allBooks){ // for each book in repository
-        if (i.getBookId().equals(bookId)){ // if repo ISBN = bookISBN
-          currentBooksInCart.add(i); 
-          System.out.println(currentCart.getShoppingCartID());//add book to cart
-          shoppingCartRepo.save(currentCart); 
-        }
-      }
-
-      for(Book i : currentBooksInCart){ //for all books in cart
-        if (!i.getBookId().equals(bookId)){
-          return ResponseEntity.ok("Book added to shopping cart");
-        }else {
-          return ResponseEntity.ok("Book already added to shopping cart");
-        }
-      } 
-
-    }else{
-      System.out.println("New Cart.");
-      for(Book i : allBooks){
-        if (i.getBookId().equals(bookId)){
-          HashSet<Book> newBooks = new HashSet<Book>();
-          newBooks.add(i);
-          currentCart.setBooks(newBooks);
-          shoppingCartRepo.save(currentCart);    
-          return ResponseEntity.ok("Book added shopping cart");     
-        }
-      }
-      
-  }
-
-    return new ResponseEntity<>("Failed to add book to shopping cart.", HttpStatus.NOT_FOUND);
-    
-  }
-
   @PostMapping(path = "/wishlist/move")
   public ResponseEntity<String> moveBookToShoppingCart(@RequestBody moveBookToShoppingCartRequest request) {
     String userId = request.userId;
+    String userEmail = request.userEmail;
     String wishlistName = request.wishlistName;
     String bookId = request.bookId;
     List<Wishlist> wishlists = this.wishlistRepo.findByUserId(userId);
+    System.out.println(wishlists);
+    System.out.println("Started2");
     for (Wishlist wishlist : wishlists) {
+      System.out.println("Finding wishlist");
       if (wishlist.getName().equals(wishlistName)) {
         wishlist.removeBook(bookId);
-        addBookToShoppingCart(bookId, userId);
-        return new ResponseEntity<String>("Book added to cart.", HttpStatus.ACCEPTED);
+        System.out.println("Book removed");
+        this.wishlistRepo.save(wishlist);
+        ShoppingCart currentCart = this.shoppingCartRepo.findFirstByUserID(userEmail);
+        System.out.println(currentCart);
+        List<Book> allBooks = this.booksRepository.findAll();
+
+        if (allBooks == null) {
+          return new ResponseEntity<>("Could not find book repo.", HttpStatus.NOT_FOUND);
+        }
+        HashSet<Book> currentBooksInCart = currentCart.getBooks();
+
+        if ((currentBooksInCart != null)) {
+
+          for (Book i : allBooks) { // for each book in repository
+            if (i.getBookId().equals(bookId)) { // if repo ISBN = bookISBN
+              currentBooksInCart.add(i);
+              System.out.println(currentCart.getShoppingCartID());// add book to cart
+              this.shoppingCartRepo.save(currentCart);
+            }
+          }
+
+          for (Book i : currentBooksInCart) { // for all books in cart
+            if (!i.getBookId().equals(bookId)) {
+              return ResponseEntity.ok("Book added to shopping cart");
+            } else {
+              return ResponseEntity.ok("Book already added to shopping cart");
+            }
+          }
+
+        } else {
+          System.out.println("New Cart.");
+          for (Book i : allBooks) {
+            if (i.getBookId().equals(bookId)) {
+              HashSet<Book> newBooks = new HashSet<Book>();
+              newBooks.add(i);
+              currentCart.setBooks(newBooks);
+              this.shoppingCartRepo.save(currentCart);
+              return ResponseEntity.ok("Book added shopping cart");
+            }
+          }
+
+        }
+
+        return new ResponseEntity<>("Failed to add book to shopping cart.", HttpStatus.NOT_FOUND);
+
       }
     }
     return new ResponseEntity<String>("Failed to move book to shopping cart.", HttpStatus.NOT_FOUND);
   }
 }
-
