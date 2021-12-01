@@ -56,7 +56,7 @@ public class UserService
 	{
 		return userRepo.findAll();
 	}
-
+	
 	public List<CardInformation>getUserPaymentCards(User user)
 	{
 		if(user.getPaymentCards() == null)
@@ -103,4 +103,3 @@ public class UserService
 	}
 
 }
-

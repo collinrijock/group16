@@ -41,4 +41,3 @@ public class CardInformation {
 	private String ccv;
 	
 }
-
